@@ -70,14 +70,14 @@ if __name__ == "__main__":
     spy.to_csv("data/spy_df.csv", index = False)
     qqq.to_csv("data/qqq_df.csv", index = False)
 
-    dia_tickers = dia["Symbol"]
-    spy_tickers = spy["Symbol"]
-    qqq_tickers = qqq["Ticker"]
+    dia_tickers = dia[["Symbol", "Company"]]
+    spy_tickers = spy[["Symbol", "Company"]]
+    qqq_tickers = qqq[["Ticker", "Company"]]
 
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
     
     ticker_df.to_csv("data/all_tickers.csv", index = False)
 
-    
+
 #py -3.12 spy_dia_qqq_comp.py
