@@ -49,7 +49,7 @@ def scrape_articles(articles):
     article_data = []
 
     try:
-        for i, art in enumerate(articles[:5]):  # Limit to 5 for testing
+        for i, art in enumerate(articles):  # Limit to 5 for testing
             print(f"[{i+1}] Fetching: {art}")
             time.sleep(random.uniform(2, 5))
 
