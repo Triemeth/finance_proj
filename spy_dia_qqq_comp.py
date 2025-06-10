@@ -77,21 +77,38 @@ if __name__ == "__main__":
     qqq_tickers = qqq[["Ticker", "Company"]]
 
     qqq_tickers["Symbol"] = qqq_tickers["Ticker"]
-    qqq_tickers = qqq_tickers.drop(columns="Ticker", axis = 1)
+    qqq_tickers = qqq_tickers.drop(columns = "Ticker", axis = 1)
+
+    qqq["Country"] = qqq["Unnamed: 2"]
+    qqq["Market_cap_b"] = qqq["Market Cap $bn"]
+    qqq = qqq.drop(columns = ["Market Cap $bn", "Unnamed: 2"], axis = 1)
+
+    spy["Pct_chg"] = spy["% Chg"]
+    spy = spy.drop(columns = ["% Chg", "#"], axis = 1)
+
+    dia["Price_on_day"] = dia["Price 6-3-25"]
+    dia["Yield_on_day"] = dia["Yield on 6/3/25"]
+    dia["Market_cap_on_day"] = dia["Market Cap on 6/3/25"]
+    dia["One_day_change"] = dia["1d Chg on 6/3/25"]
+    dia["One_month_change"] = dia["1m Chg on 6/3/25"]
+    dia["One_year_change"] = dia["12m Chg on 6/3/25"]
+    dia = dia.drop(columns = ["Price 6-3-25", "Yield on 6/3/25", 
+                              "Market Cap on 6/3/25", "1d Chg on 6/3/25",
+                              "1m Chg on 6/3/25", "12m Chg on 6/3/25"], axis = 1)
 
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
     
     #ticker_df.to_csv("data/all_tickers.csv", index = False)
 
-    time.sleep(5)
+"""    time.sleep(5)
 
-    engine = create_engine("postgresql+psycopg2://postgres:postgres@localhost:5432/financedb")
-    
+    engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
+
     dia.to_sql("DIA", engine, if_exists="replace", index=False)
     spy.to_sql("SPY", engine, if_exists="replace", index=False)
     qqq.to_sql("QQQ", engine, if_exists="replace", index=False)
-    ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)
+    ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)"""
     
 
 #py -3.12 spy_dia_qqq_comp.py

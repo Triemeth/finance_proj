@@ -7,22 +7,22 @@ CREATE TABLE IF NOT EXISTS full_articles (
 
 CREATE TABLE IF NOT EXISTS all_tickers (
     id SERIAL PRIMARY KEY,
-    symbol VARCHAR(15) UNIQUE,
-    company TEXT,
+    Symbol VARCHAR(15) UNIQUE,
+    Company TEXT,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS DIA (
     id SERIAL PRIMARY KEY,
-    symbol VARCHAR(15) UNIQUE,
-    company TEXT,
-    price_on_day FLOAT,
-    yield_on_day FLOAT,
-    market_cap_on_day FLOAT,
-    one_day_change FLOAT,
-    one_month_change FLOAT,
-    one_year_change FLOAT,
-    created_at TIMESTAMP DEFAULT NOW()
+    Symbol VARCHAR(15) UNIQUE,
+    Company TEXT,
+    Price_on_day FLOAT,
+    Yield_on_day FLOAT,
+    Market_cap_on_day FLOAT,
+    One_day_change FLOAT,
+    One_month_change FLOAT,
+    One_year_change FLOAT,
+    Created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS article_titles (
@@ -33,12 +33,13 @@ CREATE TABLE IF NOT EXISTS article_titles (
 
 CREATE TABLE IF NOT EXISTS QQQ (
     id SERIAL PRIMARY KEY,
-    ticker VARCHAR(15) UNIQUE,
-    country VARCHAR(15),
-    exchange VARCHAR(15),
-    sector TEXT,
-    market_cap_b FLOAT,
-    created_at TIMESTAMP DEFAULT NOW()
+    Company TEXT,
+    Ticker VARCHAR(15) UNIQUE,
+    Country VARCHAR(15),
+    Exchange VARCHAR(15),
+    Sector TEXT,
+    Market_cap_b FLOAT,
+    Created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS sentiment_day (
@@ -51,13 +52,12 @@ CREATE TABLE IF NOT EXISTS sentiment_day (
 
 CREATE TABLE IF NOT EXISTS SPY (
     id SERIAL PRIMARY KEY,
-    num INT,
-    company TEXT,
-    symbol VARCHAR(15) UNIQUE,
-    weight FLOAT,
-    price FLOAT,
-    change FLOAT,
-    pct_change FLOAT,
+    Company TEXT,
+    Symbol VARCHAR(15) UNIQUE,
+    Weight FLOAT,
+    Price FLOAT,
+    Chg FLOAT,
+    Pct_chg FLOAT,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
