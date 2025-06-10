@@ -2,6 +2,8 @@ import pandas as pd
 from bs4 import BeautifulSoup as bs
 import requests
 from io import StringIO
+import time
+from sqlalchemy import create_engine, insert, text
 
 def convert_to_billion(val):
     val = val.strip('$£')
@@ -66,9 +68,9 @@ if __name__ == "__main__":
     spy = get_spy()
     qqq = get_qqq()
 
-    dia.to_csv("data/dia_df.csv", index = False)
-    spy.to_csv("data/spy_df.csv", index = False)
-    qqq.to_csv("data/qqq_df.csv", index = False)
+    #dia.to_csv("data/dia_df.csv", index = False)
+    #spy.to_csv("data/spy_df.csv", index = False)
+    #qqq.to_csv("data/qqq_df.csv", index = False)
 
     dia_tickers = dia[["Symbol", "Company"]]
     spy_tickers = spy[["Symbol", "Company"]]
@@ -80,7 +82,16 @@ if __name__ == "__main__":
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
     
-    ticker_df.to_csv("data/all_tickers.csv", index = False)
+    #ticker_df.to_csv("data/all_tickers.csv", index = False)
 
+    time.sleep(5)
+
+    engine = create_engine("postgresql+psycopg2://postgres:postgres@localhost:5432/financedb")
+    
+    dia.to_sql("DIA", engine, if_exists="replace", index=False)
+    spy.to_sql("SPY", engine, if_exists="replace", index=False)
+    qqq.to_sql("QQQ", engine, if_exists="replace", index=False)
+    ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)
+    
 
 #py -3.12 spy_dia_qqq_comp.py

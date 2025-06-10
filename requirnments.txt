@@ -1,0 +1,7 @@
+pandas
+nltk
+beautifulsoup4
+selenium
+requests
+sqlalchemy
+psycopg2-binary
