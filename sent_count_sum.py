@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
     result_df = result_df.sort_values("Mentions", ascending=False)
     #Run for testing purposes
-    result_df.to_csv("data/sentiment.csv", index = False)
+    #result_df.to_csv("data/sentiment.csv", index = False)
 
     print(result_df.head(15))
 

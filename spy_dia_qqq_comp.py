@@ -74,6 +74,9 @@ if __name__ == "__main__":
     spy_tickers = spy[["Symbol", "Company"]]
     qqq_tickers = qqq[["Ticker", "Company"]]
 
+    qqq_tickers["Symbol"] = qqq_tickers["Ticker"]
+    qqq_tickers = qqq_tickers.drop(columns="Ticker", axis = 1)
+
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
     
