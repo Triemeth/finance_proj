@@ -113,9 +113,9 @@ if __name__ == "__main__":
 
     engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
 
-    dia.to_sql("DIA", engine, if_exists="replace", index=False)
-    spy.to_sql("SPY", engine, if_exists="replace", index=False)
-    qqq.to_sql("QQQ", engine, if_exists="replace", index=False)
+    dia.to_sql("dia", engine, if_exists="replace", index=False)
+    spy.to_sql("spy", engine, if_exists="replace", index=False)
+    qqq.to_sql("qqq", engine, if_exists="replace", index=False)
     ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)
 
 
