@@ -5,3 +5,4 @@ selenium
 requests
 sqlalchemy
 psycopg2-binary
+lxml

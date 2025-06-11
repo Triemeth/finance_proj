@@ -99,9 +99,9 @@ if __name__ == "__main__":
     
     #ticker_df.to_csv("data/all_tickers.csv", index = False)
 
-    time.sleep(10)
+    time.sleep(5)
 
-    engine = create_engine("postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/financedb")
+    engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
 
     dia.to_sql("DIA", engine, if_exists="replace", index=False)
     spy.to_sql("SPY", engine, if_exists="replace", index=False)
