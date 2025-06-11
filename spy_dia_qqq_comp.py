@@ -108,4 +108,8 @@ if __name__ == "__main__":
     qqq.to_sql("QQQ", engine, if_exists="replace", index=False)
     ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)
 
+    print(dia.head())
+    print(qqq.head())
+    print(spy.head())
+
 #py -3.12 spy_dia_qqq_comp.py
