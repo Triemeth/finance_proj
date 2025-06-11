@@ -13,6 +13,11 @@ def convert_to_billion(val):
         return float(val.replace('m', '')) / 1000
     else:
         return None
+    
+def convert_percentage_to_float(val):
+    if isinstance(val, str):
+        val = val.strip('%')
+    return pd.to_numeric(val, errors='coerce')
 
 def get_dia():
     url = 'https://www.dogsofthedow.com/dow-jones-industrial-average-companies.htm'
@@ -83,6 +88,7 @@ if __name__ == "__main__":
     }, inplace=True)
 
     spy.rename(columns={"% Chg": "Pct_chg"}, inplace=True)
+    spy = spy.drop(columns="#", axis=1)
 
     dia.rename(columns={
         dia.columns[2]: "Price_on_day",
@@ -93,12 +99,16 @@ if __name__ == "__main__":
         dia.columns[7]: "One_year_change"
     }, inplace=True)
 
+    dia["Yield_on_day"] = dia["Yield_on_day"].apply(convert_percentage_to_float)
+    dia["One_day_change"] = dia["One_day_change"].apply(convert_percentage_to_float)
+    dia["One_month_change"] = dia["One_month_change"].apply(convert_percentage_to_float)
+    dia["One_year_change"] = dia["One_year_change"].apply(convert_percentage_to_float)
+
+    spy["Weight"] = spy["Weight"].apply(convert_percentage_to_float)
 
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
     
-    #ticker_df.to_csv("data/all_tickers.csv", index = False)
-
     time.sleep(5)
 
     engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
@@ -108,8 +118,5 @@ if __name__ == "__main__":
     qqq.to_sql("QQQ", engine, if_exists="replace", index=False)
     ticker_df.to_sql("all_tickers", engine, if_exists="replace", index=False)
 
-    print(dia.head())
-    print(qqq.head())
-    print(spy.head())
 
 #py -3.12 spy_dia_qqq_comp.py
