@@ -7,6 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 import time, random
 import json
 import traceback
+import pandas as pd
+from sqlalchemy import create_engine, insert, text
+
 
 URL = "https://finance.yahoo.com/news/"
 
@@ -101,16 +104,29 @@ if __name__ == "__main__":
         else:
             article_data = scrape_articles(articles)
 
-            # Save full articles to json
+            """# Save full articles to json
             with open("data/full_article_dump.json", "w") as f:
                 json.dump(article_data, f, indent=2)
 
             # Save article titles to json
             with open("data/article_title_dump.json", "w") as f:
-                json.dump(articles, f, indent=2)
+                json.dump(articles, f, indent=2)"""
+
+            titles_df = pd.DataFrame({'article_link': articles})
+            full_df = pd.DataFrame(article_data)
+
+            full_df = full_df.rename(columns={"text":"article_text"}, 
+                                     inplace=True)
+
+            time.sleep(5)
+
+            engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
+
+            titles_df.to_sql("article_titles", engine, if_exists="append", index=False)
+            full_df.to_sql("full_articles", engine, if_exists="append", index=False)
 
     except Exception:
         print("An error occurred during scraping:")
         traceback.print_exc()
 
-    print(article_data)
+    #print(article_data)

@@ -73,10 +73,6 @@ if __name__ == "__main__":
     spy = get_spy()
     qqq = get_qqq()
 
-    #dia.to_csv("data/dia_df.csv", index = False)
-    #spy.to_csv("data/spy_df.csv", index = False)
-    #qqq.to_csv("data/qqq_df.csv", index = False)
-
     dia_tickers = dia[["Symbol", "Company"]]
     spy_tickers = spy[["Symbol", "Company"]]
     qqq_tickers = qqq[["Ticker", "Company"]]

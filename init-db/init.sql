@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS full_articles (
     id SERIAL PRIMARY KEY,
-    article_link TEXT,
+    url TEXT,
     article_text TEXT,
     created_at TIMESTAMP DEFAULT NOW()
 );
