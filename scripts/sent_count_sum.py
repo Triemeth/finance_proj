@@ -3,6 +3,10 @@ import json
 from collections import defaultdict
 import re
 import nltk
+import psycopg2
+from sqlalchemy import create_engine
+from datetime import date
+
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -49,12 +53,12 @@ def get_sentiment(text):
 
 
 if __name__ == "__main__":
-    tickers = pd.read_csv("data/all_tickers.csv")
-    
-    with open('data/full_article_dump.json', 'r') as file:
-        article_text = json.load(file)
+    engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
+    conn = engine.connect()
 
-    texts = [entry["text"] for entry in article_text]
+    tickers = pd.read_sql("SELECT * FROM all_tickers", conn)
+    articles_df = pd.read_sql("SELECT * FROM full_articles", conn)
+    texts = articles_df["article_text"].tolist()
 
     ticker_counts = defaultdict(int)
     ticker_sentiments = defaultdict(list)
@@ -97,16 +101,39 @@ if __name__ == "__main__":
     }
 
     result_df = pd.DataFrame({
-        "Ticker": list(ticker_counts.keys()),
-        "Mentions": list(ticker_counts.values()),
-        "Avg_Sentiment": [sentiment_avg.get(t, 0.0) for t in ticker_counts.keys()]
+        "ticker": list(ticker_counts.keys()),
+        "mentions": list(ticker_counts.values()),
+        "avg_Sentiment": [sentiment_avg.get(t, 0.0) for t in ticker_counts.keys()],
     })
 
-    result_df = result_df.sort_values("Mentions", ascending=False)
-    #Run for testing purposes
-    result_df.to_csv("data/sentiment.csv", index = False)
+    result_df.to_sql("sentiment_day", conn, if_exists="replace", index=False)
 
-    print(result_df.head(15))
+    try:
+        existing_df = pd.read_sql("SELECT * FROM sentiment_all_time", conn)
+        merged_df = pd.merge(result_df, existing_df, on="ticker", how="outer", suffixes=('_new', '_old'))
+
+        merged_df["mentions_new"] = merged_df["mentions_new"].fillna(0)
+        merged_df["mentions_old"] = merged_df["mentions_old"].fillna(0)
+        merged_df["avg_sentiment_new"] = merged_df["avg_sentiment_new"].fillna(0)
+        merged_df["avg_sentiment_old"] = merged_df["avg_sentiment_old"].fillna(0)
+
+        merged_df["total_mentions"] = merged_df["mentions_new"] + merged_df["mentions_old"]
+        merged_df["cumulative_sentiment"] = (
+            (merged_df["avg_sentiment_new"] * merged_df["mentions_new"] +
+             merged_df["avg_sentiment_old"] * merged_df["mentions_old"])
+            / merged_df["total_mentions"].replace(0, 1)
+        )
+
+        all_time_df = pd.DataFrame({
+            "ticker": merged_df["ticker"],
+            "mentions": merged_df["total_mentions"],
+            "avg_sentiment": merged_df["cumulative_sentiment"]
+        })
+
+    except Exception:
+        all_time_df = result_df[["ticker", "mentions", "avg_sentiment"]]
+
+    all_time_df.to_sql("sentiment_all_time", conn, if_exists="replace", index=False)
 
 
 #py -3.12 sent_count_sum.py
