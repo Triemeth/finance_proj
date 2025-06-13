@@ -16,10 +16,19 @@ services:
 
   script-runner:
     build: .
+    container_name: finance-scraper
     depends_on:
       - db
+    restart: on-failure
     networks:
       - finance-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: financedb
+      DB_HOST: db 
+    volumes:
+      - .:/app
       
 volumes:
   pgdata:
