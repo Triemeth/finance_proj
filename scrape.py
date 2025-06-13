@@ -115,15 +115,20 @@ if __name__ == "__main__":
             titles_df = pd.DataFrame({'article_link': articles})
             full_df = pd.DataFrame(article_data)
 
-            full_df = full_df.rename(columns={"text":"article_text"}, 
-                                     inplace=True)
+            full_df.rename(columns={"text":"article_text"}, inplace=True)
 
             time.sleep(5)
 
             engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
 
+            print("Writing titles to database...")
             titles_df.to_sql("article_titles", engine, if_exists="append", index=False)
+            print("Article titles written.")
+
+            print("Writing full articles to database...")
             full_df.to_sql("full_articles", engine, if_exists="append", index=False)
+            print("Full articles written.")
+
 
     except Exception:
         print("An error occurred during scraping:")
