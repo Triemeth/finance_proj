@@ -4,6 +4,8 @@ import requests
 from io import StringIO
 import time
 from sqlalchemy import create_engine, insert, text
+import os
+from dotenv import load_dotenv
 
 def convert_to_billion(val):
     val = val.strip('$£')
@@ -106,8 +108,17 @@ if __name__ == "__main__":
     ticker_df = ticker_df.drop_duplicates()
     
     time.sleep(5)
+    load_dotenv()
 
-    engine = create_engine("postgresql+psycopg2://postgres:postgres@db:5432/financedb")
+    db_user = os.getenv("POSTGRES_USER")
+    db_pass = os.getenv("POSTGRES_PASSWORD")
+    db_host = os.getenv("POSTGRES_HOST")
+    db_port = os.getenv("POSTGRES_PORT")
+    db_name = os.getenv("POSTGRES_DB")
+
+    engine = create_engine(f"postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}")
+
+    
 
     dia.to_sql("dia", engine, if_exists="replace", index=False)
     spy.to_sql("spy", engine, if_exists="replace", index=False)
