@@ -1,13 +1,19 @@
 #!/bin/bash
 set -e
 
-#echo "Running spy_dia_qqq_comp.py..."
-#python scripts/spy_dia_qqq_comp.py
+python scripts/spy_dia_qqq_comp.py
 
-#echo "Running scrape.py..."
-#python scripts/scrape.py
+echo "Waiting for data flush..."
+sleep 5
 
-echo "Running scrape.py..."
+echo "Running scrape.py to get articles..."
+python scripts/scrape.py
+
+echo "Waiting for data flush"
+sleep 5
+
+echo "Running sent_count_sum.py to compute sentiment"
 python scripts/sent_count_sum.py
 
 echo "All scripts completed successfully."
+
