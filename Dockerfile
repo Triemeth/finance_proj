@@ -13,7 +13,7 @@ ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python -m nltk.downloader punkt stopwords wordnet vader_lexicon
+RUN python -m nltk.downloader punkt stopwords wordnet vader_lexicon punkt_tab
 
 COPY . .
 
