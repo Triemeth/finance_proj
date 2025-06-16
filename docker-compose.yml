@@ -19,7 +19,7 @@ services:
     container_name: finance-scraper
     depends_on:
       - db
-    restart: on-failure
+    restart: "no"
     networks:
       - finance-network
     environment:
