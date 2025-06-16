@@ -108,7 +108,7 @@ if __name__ == "__main__":
     ticker_df = ticker_df.drop_duplicates()
     
     time.sleep(5)
-    load_dotenv()
+    load_dotenv('/app/.env')
 
     db_user = os.getenv("POSTGRES_USER")
     db_pass = os.getenv("POSTGRES_PASSWORD")

@@ -97,7 +97,7 @@ def scrape_articles(articles):
     return article_data
 
 if __name__ == "__main__":
-    load_dotenv()
+    load_dotenv('/app/.env')
 
     db_user = os.getenv("POSTGRES_USER")
     db_pass = os.getenv("POSTGRES_PASSWORD")
