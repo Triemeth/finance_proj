@@ -69,11 +69,12 @@ CREATE TABLE IF NOT EXISTS sentiment_all_time (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXIST sentiment_history(
-    ticker TEXT NOT NULL,
-    company TEXT,
-    date DATE NOT NULL,
-    avg_sentiment FLOAT,
-    mention_count INT,
-    PRIMARY KEY (ticker, date)
-)
+CREATE TABLE IF NOT EXIST quant_ratios_good (
+    id SERIAL PRIMARY KEY,
+    symbol VARCHAR(15) UNIQUE,
+    sortino FLOAT,
+    sharpe FLOAT,
+    maxdd FLOAT,
+    calmar FLOAT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
