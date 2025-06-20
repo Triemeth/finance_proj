@@ -58,6 +58,11 @@ if __name__ == "__main__":
         rate = tnx.history(period="1d")
         rf_rate = rate["Close"].iloc[-1] / 100
 
+        companies["sharpe"] = np.nan
+        companies["sortino"] = np.nan
+        companies["maxdd"] = np.nan
+        companies["calmar"] = np.nan
+
         for i in range(len(companies)):
             ticker = yf.Ticker(companies["ticker"][i])
             ticker_data = ticker.history(start = one_year_ago, end = today)
@@ -73,10 +78,10 @@ if __name__ == "__main__":
             dd = max_drawdown(returns)
             calmar_val = calmar(returns, dd)
 
-            companies["sortino"][i] = sortino
-            companies["sharpe"][i] = sharpe
-            companies["maxdd"][i] = dd
-            companies["calmar"][i] = calmar_val
+            companies.at[i, "sharpe"] = sharpe
+            companies.at[i, "sortino"] = sortino
+            companies.at[i, "maxdd"] = dd
+            companies.at[i, "calmar"] = calmar_val
 
         companies.to_sql("quant_ratios", conn, if_exists="replace", index=False)
 
