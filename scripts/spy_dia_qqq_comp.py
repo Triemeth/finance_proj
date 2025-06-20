@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from io import StringIO
 import time
-from sqlalchemy import create_engine, insert, text
+from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 

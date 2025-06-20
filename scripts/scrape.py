@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time, random
 import traceback
 import pandas as pd
-from sqlalchemy import create_engine, insert, text
+from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 
