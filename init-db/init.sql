@@ -68,3 +68,12 @@ CREATE TABLE IF NOT EXISTS sentiment_all_time (
     avg_sentiment FLOAT,
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXIST sentiment_history(
+    ticker TEXT NOT NULL,
+    company TEXT,
+    date DATE NOT NULL,
+    avg_sentiment FLOAT,
+    mention_count INT,
+    PRIMARY KEY (ticker, date)
+)

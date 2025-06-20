@@ -5,7 +5,7 @@ import re
 import nltk
 import psycopg2
 from sqlalchemy import create_engine
-from datetime import date
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 
@@ -153,7 +153,13 @@ if __name__ == "__main__":
             print(f"Could not load existing sentiment_all_time: {e}")
             all_time_df = result_df[["ticker", "mentions", "avg_sentiment"]]
 
-        print("All-Time Sentiment:")
-        print(all_time_df.head())
-
         all_time_df.to_sql("sentiment_all_time", conn, if_exists="replace", index=False)
+
+        result_df['date'] = datetime.today().date()
+        matrix_df = result_df.pivot(index="date", columns="ticker",values=["mentions", "avg_sentiment"])
+        matrix_df = matrix_df.fillna(0)
+
+        matrix_df = matrix_df.reset_index()
+
+        matrix_df.to_sql('sentiment_matrix', engine, if_exists='replace', index=False)
+
