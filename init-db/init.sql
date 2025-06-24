@@ -79,3 +79,5 @@ CREATE TABLE IF NOT EXIST quant_ratios(
     calmar FLOAT,
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+

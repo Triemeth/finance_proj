@@ -41,11 +41,23 @@ if __name__ == "__main__":
     with engine.begin() as conn:
         sentiment = pd.read_sql("SELECT * FROM sentiment_day", conn)
 
-        sentiment_good = sentiment.sort_values(['mentions', "avg_sentiment"], ascending=[True, True])
+        MENTION_THRESHOLD = 5
+        HIGH_SENTIMENT_THRESHOLD = 0.55
+        LOW_SENTIMENT_THRESHOLD = 0.45
+
+        sentiment_good = sentiment[
+            (sentiment["mentions"] >= MENTION_THRESHOLD) &
+            (sentiment["avg_sentiment"] >= HIGH_SENTIMENT_THRESHOLD)
+        ].sort_values(['mentions', "avg_sentiment"], ascending=[False, False])
+
         top_companies = sentiment_good[["ticker"]].head(10).copy()
         top_companies["postive"] = 1
 
-        sentiment_bad = sentiment.sort_values(['mentions', "avg_sentiment"], ascending=[True, False])
+        sentiment_bad = sentiment[
+            (sentiment["mentions"] >= MENTION_THRESHOLD) &
+            (sentiment["avg_sentiment"] <= LOW_SENTIMENT_THRESHOLD)
+        ].sort_values(['mentions', "avg_sentiment"], ascending=[False, True])
+
         bottom_companies = sentiment_bad[["ticker"]].head(10).copy()
         bottom_companies["postive"] = 0
 
@@ -68,22 +80,26 @@ if __name__ == "__main__":
             ticker = yf.Ticker(yf_ticker)
             ticker_data = ticker.history(start = one_year_ago, end = today)
 
-            if ticker_data.empty or 'Adj Close' not in ticker_data:
+            price_col = 'Adj Close' if 'Adj Close' in ticker_data.columns else 'Close'
+            ticker_data['Daily Returns'] = ticker_data[price_col].pct_change()
+
+
+            if ticker_data.empty or 'Daily Returns' not in ticker_data:
                 continue
 
-            ticker_data['Daily Returns'] = ticker_data['Adj Close'].pct_change()
             returns = ticker_data['Daily Returns'].dropna()
 
-            sharpe = sharpe_ratio(returns, rf_rate)
             sortino = sortino_ratio(returns, rf_rate)
+            sharpe = sharpe_ratio(returns, rf_rate)
             dd = max_drawdown(returns)
             calmar_val = calmar(returns, dd)
-
-            companies.at[i, "sharpe"] = sharpe
+            
             companies.at[i, "sortino"] = sortino
+            companies.at[i, "sharpe"] = sharpe
             companies.at[i, "maxdd"] = dd
             companies.at[i, "calmar"] = calmar_val
 
+        print(companies)
         companies.to_sql("quant_ratios", conn, if_exists="replace", index=False)
 
 
