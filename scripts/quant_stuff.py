@@ -41,12 +41,12 @@ if __name__ == "__main__":
     with engine.begin() as conn:
         sentiment = pd.read_sql("SELECT * FROM sentiment_day", conn)
 
-        sentiment_good = sentiment.sort_values(['mentions', "avg_sentiment", ascending=[True, True]])
-        top_companies = sentiment_good["ticker"].head(10)
+        sentiment_good = sentiment.sort_values(['mentions', "avg_sentiment"], ascending=[True, True])
+        top_companies = sentiment_good[["ticker"]].head(10).copy()
         top_companies["postive"] = 1
 
-        sentiment_bad = sentiment.sort_values(['mentions', "avg_sentiment", ascending=[True, False]])
-        bottom_companies = sentiment_bad["ticker"].head(10)
+        sentiment_bad = sentiment.sort_values(['mentions', "avg_sentiment"], ascending=[True, False])
+        bottom_companies = sentiment_bad[["ticker"]].head(10).copy()
         bottom_companies["postive"] = 0
 
         companies = pd.concat([top_companies, bottom_companies], ignore_index=True)
@@ -64,7 +64,8 @@ if __name__ == "__main__":
         companies["calmar"] = np.nan
 
         for i in range(len(companies)):
-            ticker = yf.Ticker(companies["ticker"][i])
+            yf_ticker = companies.at[i, "ticker"].replace('.', '-')
+            ticker = yf.Ticker(yf_ticker)
             ticker_data = ticker.history(start = one_year_ago, end = today)
 
             if ticker_data.empty or 'Adj Close' not in ticker_data:

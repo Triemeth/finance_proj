@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS sentiment_all_time (
 
 CREATE TABLE IF NOT EXIST quant_ratios(
     id SERIAL PRIMARY KEY,
-    symbol VARCHAR(15) UNIQUE,
+    ticker VARCHAR(15) UNIQUE,
     postive INT,
     sortino FLOAT,
     sharpe FLOAT,
