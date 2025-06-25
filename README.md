@@ -19,6 +19,6 @@ This project scrapes news articles from Yahoo Finance for a given day and perfor
 * Pull sentiment for a social media source(ex. Twitter)
 * Sort companies into industries to find the sentiments on industries as a whole.
   
-  
+## Example DashBoard
 ![Power BI Dashboard](readme_img/fin_analysis_dash.png)
 
