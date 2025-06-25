@@ -11,6 +11,6 @@ This project scrapes news articles from Yahoo Finance for a given day and perfor
 * Metrics such as Sharpe ratio and max drew down are calculated using the top 10 highest and lowest sentiments for the day (which must be above the threshold limit).
 * Once all data is ready it is connected to PowerBI to create a simple dashboard.
   
-![Power BI Dashboard](C:\Application_stuff\Proj_related\Sentiment_analysis\fin_analysis_dash)
+![Power BI Dashboard](readme_img/fin_analysis_dash)
 
 ## Future Plans
