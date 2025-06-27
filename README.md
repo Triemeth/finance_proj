@@ -25,7 +25,7 @@ As of now the scraper seems to be reading some tickers or company names and is o
 ## Setup
 ### Clone the project
 ```bash
-git clone 
+git clone https://github.com/Triemeth/finance_proj.git
 cd finace_analysis
 ```
 ### Build containers
