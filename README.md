@@ -22,3 +22,27 @@ As of now the scraper seems to be reading some tickers or company names and is o
 ## Example DashBoard
 ![Power BI Dashboard](readme_img/fin_analysis_dash.png)
 
+## Setup
+### Clone the project
+```bash
+git clone 
+cd finace_analysis
+```
+### Build containers
+```bash
+docker-compose build
+```
+### Start containers
+```bash
+docker-compose up -d
+```
+### Stop containers (once done running) 
+```bash
+docker-compose down
+```
+### Connect to powerBI
+1. Open Power BI Desktop
+2. Go to Home > Get Data > PostgreSQL database
+3. Server: localhost DB: financedb
+4. Enter password (whatever is in env file)
+5. Connect and create tables
