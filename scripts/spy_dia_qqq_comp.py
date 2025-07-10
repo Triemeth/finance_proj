@@ -106,6 +106,9 @@ if __name__ == "__main__":
 
     ticker_df = pd.concat([dia_tickers, spy_tickers, qqq_tickers], ignore_index=True)
     ticker_df = ticker_df.drop_duplicates()
+
+    #Droping Agilent Technologies until issue is solved
+    ticker_df = ticker_df[ticker_df["Symbol"] != "A"]
     
     time.sleep(5)
     load_dotenv('/app/.env')
@@ -117,8 +120,6 @@ if __name__ == "__main__":
     db_name = os.getenv("POSTGRES_DB")
 
     engine = create_engine(f"postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}")
-
-    
 
     dia.to_sql("dia", engine, if_exists="replace", index=False)
     spy.to_sql("spy", engine, if_exists="replace", index=False)
