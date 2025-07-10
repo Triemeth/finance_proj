@@ -12,7 +12,8 @@ This project scrapes news articles from Yahoo Finance for a given day and perfor
 * Once all data is ready it is connected to PowerBI to create a simple dashboard.
 
 ## Issues
-As of now the scraper seems to be reading some tickers or company names and is overcounting for companies like Public Service Enterprise Group Inc(PEG) as well as Agilent Technologies(A). It seems to be working fine with all other companies for now. Public Service Enterprise Group Inc. could be just truly occurring a lot due to it being not a common character string but Agilent Technologies is likely counting capital ever captial a.
+* As of now the scraper seems to be reading some tickers or company names and is overcounting for companies like Public Service Enterprise Group Inc(PEG) as well as Agilent Technologies(A). It seems to be working fine with all other companies for now. Public Service Enterprise Group Inc. could be just truly occurring a lot due to it being not a common character string but Agilent Technologies is likely counting capital ever captial a.
+* High mentions and low sentiment in power BI also seem to be having issues at the moment.
 
 ## Future Plans
 * Try with A fine-tuned sentiment analysis model.
